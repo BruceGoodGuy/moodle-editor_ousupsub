@@ -32,7 +32,7 @@ $type = optional_param('type', 'both', PARAM_ALPHA);
 require_login();
 require_capability('moodle/site:config', context_system::instance());
 
-if (!in_array($type, array('both', 'sub', 'sup'))) {
+if (!in_array($type, ['both', 'sub', 'sup'])) {
     throw new coding_exception("'type' in the URL must be 'both', 'sub', or 'sup'.");
 }
 
@@ -45,16 +45,16 @@ $PAGE->set_heading('Test superscript/subscript editor');
 echo $OUTPUT->header();
 echo html_writer::tag('h2', 'New supsub');
 echo html_writer::label('Input', 'supsub') . ' ';
-echo html_writer::tag('textarea', '', array('name' => 'supsub', 'id' => 'supsub', 'rows' => 2, 'cols' => 20));
-$neweditor->use_editor('supsub', array('supsub' => $type));
-$submitoptions = array('id' => 'submitsupsub', 'type' => 'submit', 'value' => 'submit supsub',
-        'onClick' => 'emulateSubmit(this.id.substring(6, this.id.length));');
+echo html_writer::tag('textarea', '', ['name' => 'supsub', 'id' => 'supsub', 'rows' => 2, 'cols' => 20]);
+$neweditor->use_editor('supsub', ['supsub' => $type]);
+$submitoptions = ['id' => 'submitsupsub', 'type' => 'submit', 'value' => 'submit supsub',
+        'onClick' => 'emulateSubmit(this.id.substring(6, this.id.length));'];
 echo ' ', html_writer::tag('input', '', $submitoptions);
 
 echo html_writer::tag('h2', 'New supsub rows 4, cols 40');
 echo html_writer::label('Input rows 4 cols 40', 'supsub2') . ' ';
-echo html_writer::tag('textarea', '', array('name' => 'supsub2', 'id' => 'supsub2', 'rows' => 4, 'cols' => 40));
-$neweditor->use_editor('supsub2', array('supsub' => $type));
+echo html_writer::tag('textarea', '', ['name' => 'supsub2', 'id' => 'supsub2', 'rows' => 4, 'cols' => 40]);
+$neweditor->use_editor('supsub2', ['supsub' => $type]);
 
 $submitoptions['id'] = 'submitsupsub2';
 $submitoptions['value'] = 'submit supsub2';
@@ -62,18 +62,8 @@ echo  ' ', html_writer::tag('input', '', $submitoptions);
 
 echo html_writer::tag('h2', 'ATTO Editor');
 echo html_writer::label('ATTO Input', 'attoeditor');
-echo html_writer::tag('textarea', '', array('name' => 'attoeditor', 'id' => 'attoeditor', 'rows' => 2, 'cols' => 20));
-$attoeditor->use_editor('attoeditor', array('supsub' => $type));
+echo html_writer::tag('textarea', '', ['name' => 'attoeditor', 'id' => 'attoeditor', 'rows' => 2, 'cols' => 20]);
+$attoeditor->use_editor('attoeditor', ['supsub' => $type]);
 $submitoptions['id'] = 'submitattoeditor';
 echo html_writer::tag('input', '', $submitoptions);
-?>
-<script type="text/javascript">
-YUI().use("moodle-editor_ousupsub-editor", function(Y) {
-    window.emulateSubmit = function(id) {
-        Y.M.editor_ousupsub.getEditor(id).updateFromTextArea();
-    }
-});
-</script>
-<?php
 echo $OUTPUT->footer();
-

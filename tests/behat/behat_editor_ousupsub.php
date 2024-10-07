@@ -58,7 +58,7 @@ class behat_editor_ousupsub extends behat_base {
      *
      * @Given /^I select the text in the "([^"]*)" ousupsub editor$/
      * @throws ElementNotFoundException Thrown by behat_base::find
-     * @param string $field
+     * @param string $fieldlocator
      * @return void
      */
     public function select_the_text_in_the_ousupsub_editor($fieldlocator) {
@@ -81,7 +81,7 @@ class behat_editor_ousupsub extends behat_base {
      * @Given /^I should see "([^"]*)" in the "([^"]*)" ousupsub editor$/
      * @throws ElementNotFoundException Thrown by behat_base::find
      * @param string $text
-     * @param string $field
+     * @param string $fieldlocator
      * @return void
      */
     public function should_see_in_the_ousupsub_editor($text, $fieldlocator) {
@@ -130,8 +130,8 @@ class behat_editor_ousupsub extends behat_base {
      *
      * @Given /^I select the range "([^"]*)" in the "([^"]*)" ousupsub editor$/
      * @throws ElementNotFoundException Thrown by behat_base::find
-     * @param string $text
-     * @param string $field
+     * @param string $range
+     * @param string $fieldlocator
      */
     public function select_range_in_the_ousupsub_editor($range, $fieldlocator) {
         // NodeElement.keyPress simply doesn't work.
@@ -205,7 +205,7 @@ class behat_editor_ousupsub extends behat_base {
      * @Given /^I press the key "([^"]*)" in the "([^"]*)" ousupsub editor$/
      * @throws ElementNotFoundException Thrown by behat_base::find
      * @param string $keys
-     * @param string $field
+     * @param string $fieldlocator
      */
     public function press_key_in_the_ousupsub_editor($keys, $fieldlocator) {
         // NodeElement.keyPress simply doesn't work.
@@ -289,7 +289,7 @@ class behat_editor_ousupsub extends behat_base {
      * @throws ElementNotFoundException Thrown by behat_base::find
      * @param string $action 'enter', 'insert' or 'append' text.
      * @param string $text
-     * @param string $field
+     * @param string $fieldlocator
      */
     public function enter_text_in_the_ousupsub_editor($action, $text, $fieldlocator) {
         // NodeElement.keyPress simply doesn't work.
@@ -329,7 +329,7 @@ class behat_editor_ousupsub extends behat_base {
      * @Given /^I paste the text "([^"]*)" in the "([^"]*)" ousupsub editor$/
      * @throws ElementNotFoundException Thrown by behat_base::find
      * @param string $text
-     * @param string $field
+     * @param string $fieldlocator
      */
     public function paste_text_in_the_ousupsub_editor($text, $fieldlocator) {
         // NodeElement.keyPress simply doesn't work.
@@ -383,8 +383,7 @@ function PasteTextBehat (id, text) {
      * Select the first button in a stand-alone ousupsub field.
      *
      * @Given /^I select and click the first button in the "([^"]*)" ousupsub editor$/
-     * @param string $text
-     * @param string $field
+     * @param string $fieldlocator
      */
     public function select_and_click_first_button_in_the_ousupsub_editor($fieldlocator) {
         // NodeElement.keyPress simply doesn't work.
@@ -415,9 +414,9 @@ function PasteTextBehat (id, text) {
      *
      * @Given /^I press the superscript key in the "([^"]*)" ousupsub editor$/
      */
-    public function i_press_superscript_key_in_the_ousupsub_edito($fieldlocator) {
+    public function i_press_superscript_key_in_the_ousupsub_edito() {
         $this->execute('behat_editor_ousupsub::press_key_in_the_ousupsub_editor',
-                array('94', 'Input'));
+                ['94', 'Input']);
     }
 
     /**
@@ -425,9 +424,9 @@ function PasteTextBehat (id, text) {
      *
      * @Given /^I press the subscript key in the "([^"]*)" ousupsub editor$/
      */
-    public function i_press_subscript_key_in_the_ousupsub_edito($fieldlocator) {
+    public function i_press_subscript_key_in_the_ousupsub_edito() {
         $this->execute('behat_editor_ousupsub::press_key_in_the_ousupsub_editor',
-                array('95', 'Input'));
+                ['95', 'Input']);
     }
 
     /**
@@ -435,9 +434,9 @@ function PasteTextBehat (id, text) {
      *
      * @Given /^I press the up arrow key in the "([^"]*)" ousupsub editor$/
      */
-    public function i_press_up_arrow_key_in_the_ousupsub_edito($fieldlocator) {
+    public function i_press_up_arrow_key_in_the_ousupsub_edito() {
         $this->execute('behat_editor_ousupsub::press_key_in_the_ousupsub_editor',
-                array('\'ArrowUp\'', 'Input'));
+                ['\'ArrowUp\'', 'Input']);
     }
 
     /**
@@ -445,9 +444,9 @@ function PasteTextBehat (id, text) {
      *
      * @Given /^I press the down arrow key in the "([^"]*)" ousupsub editor$/
      */
-    public function i_press_down_arrow_key_in_the_ousupsub_edito($fieldlocator) {
+    public function i_press_down_arrow_key_in_the_ousupsub_edito() {
         $this->execute('behat_editor_ousupsub::press_key_in_the_ousupsub_editor',
-                array('\'ArrowDown\'', 'Input'));
+                ['\'ArrowDown\'', 'Input']);
     }
 
     /**
@@ -455,9 +454,9 @@ function PasteTextBehat (id, text) {
      *
      * @Given /^I press the undo key in the "([^"]*)" ousupsub editor$/
      */
-    public function i_press_undo_key_in_the_ousupsub_edito($fieldlocator) {
+    public function i_press_undo_key_in_the_ousupsub_edito() {
         $this->execute('behat_editor_ousupsub::press_key_in_the_ousupsub_editor',
-                array('\'ctrlKey\', \'z\'', 'Input'));
+                ['\'ctrlKey\', \'z\'', 'Input']);
     }
 
     /**
@@ -465,17 +464,14 @@ function PasteTextBehat (id, text) {
      *
      * @Given /^I press the redo key in the "([^"]*)" ousupsub editor$/
      */
-    public function i_press_redo_key_in_the_ousupsub_edito($fieldlocator) {
+    public function i_press_redo_key_in_the_ousupsub_edito() {
         $this->execute('behat_editor_ousupsub::press_key_in_the_ousupsub_editor',
-                array('\'ctrlKey\', \'y\'', 'Input'));
+                ['\'ctrlKey\', \'y\'', 'Input']);
     }
 
     /**
      * Returns a javascript helper method to update the textarea text from the contenteditable div
      * and trigger required key and html events for the editor.
-     *
-     * @method UpdateTextArea
-     * @param {String} id
      */
     protected function get_js_update_textarea() {
         $js = $this->get_js_get_editor();
@@ -490,9 +486,6 @@ function UpdateTextArea(id) {
     /**
      * Returns a javascript helper method to update the textarea text from the contenteditable div
      * and trigger required key and html events for the editor.
-     *
-     * @method UpdateTextArea
-     * @param {String} id
      */
     protected function get_js_get_editor() {
         $js = '

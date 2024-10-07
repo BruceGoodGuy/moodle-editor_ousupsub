@@ -34,6 +34,6 @@ $string['settings'] = 'Superscript/subscript editor settings';
 $string['subscript'] = 'Subscript';
 $string['superscript'] = 'Superscript';
 $string['useeditor'] = 'Use this editor';
-$string['useeditor_desc'] = 'Use this editor in question types, in preference to the old superscript/subscript editor, if both are installed.';
 $string['redo'] = 'Redo';
+$string['useeditor_desc'] = 'Use this editor in question types, in preference to the old superscript/subscript editor, if both are installed.';
 $string['undo'] = 'Undo';

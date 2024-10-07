@@ -15,14 +15,12 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * YUI text editor integration.
+ * New OU text editor integration.
  *
  * @package   editor_ousupsub
  * @copyright 2014 The Open University
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-defined('MOODLE_INTERNAL') || die();
 
 
 /**
@@ -48,7 +46,7 @@ class ousupsub_texteditor extends texteditor {
      */
     public function get_supported_formats() {
         // FORMAT_MOODLE is not supported here, sorry.
-        return array(FORMAT_HTML => FORMAT_HTML);
+        return [FORMAT_HTML => FORMAT_HTML];
     }
 
     /**
@@ -74,7 +72,7 @@ class ousupsub_texteditor extends texteditor {
      * @param array $options
      * @param null $fpoptions
      */
-    public function use_editor($elementid, array $options = null, $fpoptions = null) {
+    public function use_editor($elementid, ?array $options = null, $fpoptions = null) {
         global $PAGE, $OUTPUT;
 
         if (empty($options['context'])) {
@@ -86,15 +84,15 @@ class ousupsub_texteditor extends texteditor {
 
         switch ($options['supsub']) {
             case 'both':
-                $groups = array('style1' => array('superscript', 'subscript'));
+                $groups = ['style1' => ['superscript', 'subscript']];
                 break;
 
             case 'sup':
-                $groups = array('style1' => array('superscript'));
+                $groups = ['style1' => ['superscript']];
                 break;
 
             case 'sub':
-                $groups = array('style1' => array('subscript'));
+                $groups = ['style1' => ['subscript']];
                 break;
 
             default:
@@ -102,9 +100,9 @@ class ousupsub_texteditor extends texteditor {
                         "' for option 'supsub'. Must be one of 'both', 'sup' or 'sub'.");
         }
 
-        $groupplugins = array();
+        $groupplugins = [];
         foreach ($groups['style1'] as $plugin) {
-            $groupplugins[] = array('name' => $plugin, 'params' => array());
+            $groupplugins[] = ['name' => $plugin, 'params' => []];
         }
 
         $PAGE->requires->js_call_amd('editor_ousupsub/editor', 'loadEditor', [
@@ -119,9 +117,9 @@ class ousupsub_texteditor extends texteditor {
                     'subscript' => [
                         'icon' => $OUTPUT->pix_icon('e/subscript', '', 'core'),
                         'title' => get_string('button_sub_title', 'editor_ousupsub'),
-                    ]
-                ]
-            ]
+                    ],
+                ],
+            ],
         ]);
     }
 
@@ -132,7 +130,7 @@ class ousupsub_texteditor extends texteditor {
      * @param array $options
      * @param array $fpoptions
      */
-    protected function get_init_params($elementid, array $options = null, array $fpoptions = null, $plugins = null) {
+    protected function get_init_params($elementid, ?array $options = null, ?array $fpoptions = null, $plugins = null) {
         global $PAGE;
 
         $directionality = get_string('thisdirection', 'langconfig');
@@ -141,7 +139,7 @@ class ousupsub_texteditor extends texteditor {
         $lang           = current_language();
         $contentcss     = $PAGE->theme->editor_css_url()->out(false);
 
-        $params = array(
+        $params = [
             'elementid' => $elementid,
             'content_css' => $contentcss,
             'contextid' => $options['context']->id,
@@ -149,8 +147,8 @@ class ousupsub_texteditor extends texteditor {
             'directionality' => $directionality,
             'filepickeroptions' => array(),
             'plugins' => $plugins,
-            'pageHash' => sha1($PAGE->url)
-        );
+            'pageHash' => sha1($PAGE->url),
+        ];
         if ($fpoptions) {
             $params['filepickeroptions'] = $fpoptions;
         }
