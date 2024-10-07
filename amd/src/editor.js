@@ -25,12 +25,12 @@ const defaultActions = {
     sup: {
         name: 'superscript',
         tag: 'sup',
-        class: 'ousupsub_superscript_button_superscript',
+        'class': 'ousupsub_superscript_button_superscript',
     },
     sub: {
         name: 'subscript',
         tag: 'sub',
-        class: 'ousupsub_subscript_button_subscript',
+        'class': 'ousupsub_subscript_button_subscript',
     },
 };
 
@@ -80,7 +80,7 @@ class OUSupSubEditor {
      */
     init() {
         const textareaElement = this.getTextArea();
-        const { classes, custom } = this.settings;
+        const {classes, custom} = this.settings;
 
         if (!textareaElement) {
             return;
@@ -185,7 +185,7 @@ class OUSupSubEditor {
      * @return {HTMLElement} The content area element.
      */
     initEditorContent = () => {
-        const { classes, custom } = this.settings;
+        const {classes, custom} = this.settings;
         const contentElement = this.createElement('div', {
             'class': (classes.content + ' ' + (custom.content ?? '')).trim(),
             contenteditable: true,
@@ -197,9 +197,9 @@ class OUSupSubEditor {
             id: `${this.settings.element.replace(/:/g, ":")}editable`,
         });
 
-        contentElement.addEventListener('blur', (event) => {
+        contentElement.addEventListener('blur', () => {
             this.saveHistory();
-        })
+        });
 
         // Listen for the selection change event.
         document.addEventListener('selectionchange', () => this.handleSelectionChange());
@@ -441,7 +441,7 @@ class OUSupSubEditor {
      * @param {String|Boolean} type - The type of the button: sup or sub.
      */
     setActiveButton(type) {
-        const { toolbar, button } = this.settings.classes;
+        const {toolbar, button} = this.settings.classes;
         // Deactivate all the existing buttons.
         this.getEditor().querySelectorAll(`.${toolbar} .${button}`)
             .forEach(button => button.classList.remove('highlight'));
@@ -479,7 +479,7 @@ class OUSupSubEditor {
 
             button.innerHTML = this.settings.buttons[action.name].icon;
             button.setAttribute('type', 'button');
-            button.onclick = (event) => {
+            button.onclick = () => {
                 const selection = window.getSelection();
                 const nodeEl = this.isSelectionInsideSubSup();
                 if (selection.isCollapsed && nodeEl !== false) {
@@ -514,7 +514,7 @@ class OUSupSubEditor {
         const selection = window.getSelection();
         // Selection range.
         const range = selection.getRangeAt(0);
-        const { tag } = action;
+        const {tag} = action;
         const nodeEl = this.isSelectionInsideSubSup();
         // In case the user doesn't select any text.
         if (selection.isCollapsed) {
@@ -649,7 +649,7 @@ class OUSupSubEditor {
             selection.addRange(range);
             // Clean up all the empty text.
             this.getEditorContent().childNodes.forEach(el => {
-                if(el.nodeName === '#text' && el.textContent === '') {
+                if (el.nodeName === '#text' && el.textContent === '') {
                     el.remove();
                 }
             });
@@ -657,7 +657,7 @@ class OUSupSubEditor {
         }
         // Clean up.
         this.getEditorContent().childNodes.forEach(el => {
-            if(el.nodeName === '#text' && el.textContent === '') {
+            if (el.nodeName === '#text' && el.textContent === '') {
                 el.remove();
             }
         });
@@ -689,12 +689,12 @@ class OUSupSubEditor {
 
         // Rules that get rid of the real-nasties and don't care about normalize code (correct quotes, white spaces, etc.).
         let rules = [
-            { regex: /<\s*\/html\s*>([\s\S]+)$/gi, replace: "" },
-            { regex: /<!--\[if[\s\S]*?endif\]-->/gi, replace: "" },
-            { regex: /<!--(Start|End)Fragment-->/gi, replace: "" },
-            { regex: /<xml[^>]*>[\s\S]*?<\/xml>/gi, replace: "" },
-            { regex: /<\?xml[^>]*>[\s\S]*?<\\\?xml>/gi, replace: "" },
-            { regex: /<\/?\w+:[^>]*>/gi, replace: "" }
+            {regex: /<\s*\/html\s*>([\s\S]+)$/gi, replace: ""},
+            {regex: /<!--\[if[\s\S]*?endif\]-->/gi, replace: ""},
+            {regex: /<!--(Start|End)Fragment-->/gi, replace: ""},
+            {regex: /<xml[^>]*>[\s\S]*?<\/xml>/gi, replace: ""},
+            {regex: /<\?xml[^>]*>[\s\S]*?<\\\?xml>/gi, replace: ""},
+            {regex: /<\/?\w+:[^>]*>/gi, replace: ""}
         ];
 
         // Apply the first set of harsher rules.
@@ -718,10 +718,10 @@ class OUSupSubEditor {
 
         // Run some more rules that care about quotes and whitespace.
         rules = [
-            { regex: /(<[^>]*?style\s*?=\s*?"[^>"]*?)(?:[\s]*MSO[-:][^>;"]*;?)+/gi, replace: "$1" },
-            { regex: /(<[^>]*?class\s*?=\s*?"[^>"]*?)(?:[\s]*MSO[_a-zA-Z0-9\-]*)+/gi, replace: "$1" },
-            { regex: /(<[^>]*?class\s*?=\s*?"[^>"]*?)(?:[\s]*Apple-[_a-zA-Z0-9\-]*)+/gi, replace: "$1" },
-            { regex: /<a [^>]*?name\s*?=\s*?"OLE_LINK\d*?"[^>]*?>\s*?<\/a>/gi, replace: "" },
+            {regex: /(<[^>]*?style\s*?=\s*?"[^>"]*?)(?:[\s]*MSO[-:][^>;"]*;?)+/gi, replace: "$1" },
+            {regex: /(<[^>]*?class\s*?=\s*?"[^>"]*?)(?:[\s]*MSO[_a-zA-Z0-9\-]*)+/gi, replace: "$1"},
+            {regex: /(<[^>]*?class\s*?=\s*?"[^>"]*?)(?:[\s]*Apple-[_a-zA-Z0-9\-]*)+/gi, replace: "$1"},
+            {regex: /<a [^>]*?name\s*?=\s*?"OLE_LINK\d*?"[^>]*?>\s*?<\/a>/gi, replace: ""},
         ];
 
         // Apply the rules.
@@ -738,7 +738,7 @@ class OUSupSubEditor {
      * @return {Boolean} The result after verifying whether it is allowed.
      */
     isSupportSupSub(action) {
-        const { type } = this.settings;
+        const {type} = this.settings;
         return type === 'both' || type === action;
     }
 
@@ -766,79 +766,79 @@ class OUSupSubEditor {
         // Removing limited things that can break the page or a disallowed, like unclosed comments, style blocks, etc.
 
         const rules = [
-            //Remove empty paragraphs.
-            { regex: /<p[^>]*>(&nbsp;|\s)*<\/p>/gi, replace: "" },
+            // Remove empty paragraphs.
+            {regex: /<p[^>]*>(&nbsp;|\s)*<\/p>/gi, replace: ""},
 
-            //Remove attributes on sup and sub tags.
-            { regex: /<sup[^>]*(&nbsp;|\s)*>/gi, replace: "<sup>" },
-            { regex: /<sub[^>]*(&nbsp;|\s)*>/gi, replace: "<sub>" },
+            // Remove attributes on sup and sub tags.
+            {regex: /<sup[^>]*(&nbsp;|\s)*>/gi, replace: "<sup>"},
+            {regex: /<sub[^>]*(&nbsp;|\s)*>/gi, replace: "<sub>"},
 
             //Replace &nbsp; with space.
-            { regex: /&nbsp;/gi, replace: " " },
+            {regex: /&nbsp;/gi, replace: " "},
 
-            //Combine matching tags with spaces in between.
-            { regex: /<\/sup>(\s*)+<sup>/gi, replace: "$1" },
-            { regex: /<\/sub>(\s*)+<sub>/gi, replace: "$1" },
+            // Combine matching tags with spaces in between.
+            {regex: /<\/sup>(\s*)+<sup>/gi, replace: "$1"},
+            {regex: /<\/sub>(\s*)+<sub>/gi, replace: "$1"},
 
-            //Move spaces after start sup and sub tags to before.
-            { regex: /<sup>(\s*)+/gi, replace: "$1<sup>" },
-            { regex: /<sub>(\s*)+/gi, replace: "$1<sub>" },
+            // Move spaces after start sup and sub tags to before.
+            {regex: /<sup>(\s*)+/gi, replace: "$1<sup>"},
+            {regex: /<sub>(\s*)+/gi, replace: "$1<sub>"},
 
-            //Move spaces before end sup and sub tags to after.
-            { regex: /(\s*)+<\/sup>/gi, replace: "</sup>$1" },
-            { regex: /(\s*)+<\/sub>/gi, replace: "</sub>$1" },
+            // Move spaces before end sup and sub tags to after.
+            {regex: /(\s*)+<\/sup>/gi, replace: "</sup>$1"},
+            {regex: /(\s*)+<\/sub>/gi, replace: "</sub>$1"},
 
-            //Remove empty br tags.
-            { regex: /<br>/gi, replace: "" },
+            // Remove empty br tags.
+            {regex: /<br>/gi, replace: ""},
 
             // Remove any style blocks. Some browsers do not work well with them in a contenteditable.
             // Plus style blocks are not allowed in body html, except with "scoped", which most browsers don't support as of 2015.
             // Reference: "http://stackoverflow.com/questions/1068280/javascript-regex-multiline-flag-doesnt-work"
-            { regex: /<style[^>]*>[\s\S]*?<\/style>/gi, replace: "" },
+            {regex: /<style[^>]*>[\s\S]*?<\/style>/gi, replace: ""},
 
             // Remove any open HTML comment opens that are not followed by a close. This can completely break page layout.
-            { regex: /<!--(?![\s\S]*?-->)/gi, replace: "" },
+            {regex: /<!--(?![\s\S]*?-->)/gi, replace: ""},
 
             // Remove elements that can not contain visible text.
-            { regex: /<script[^>]*>[\s\S]*?<\/script>/gi, replace: "" },
+            {regex: /<script[^>]*>[\s\S]*?<\/script>/gi, replace: ""},
 
             // Source: "http://www.codinghorror.com/blog/2006/01/cleaning-words-nasty-html.html"
             // Remove forbidden tags for content, title, meta, style, st0-9, head, font, html, body, link.
-            { regex: /<\/?(?:br|title|meta|style|std|font|html|body|link|a|ul|li|ol)[^>]*?>/gi, replace: "" },
-            { regex: /<\/?(?:b|i|u|ul|ol|li|img)[^>]*?>/gi, replace: "" },
+            {regex: /<\/?(?:br|title|meta|style|std|font|html|body|link|a|ul|li|ol)[^>]*?>/gi, replace: ""},
+            {regex: /<\/?(?:b|i|u|ul|ol|li|img)[^>]*?>/gi, replace: ""},
             // Source:"https://developer.mozilla.org/en/docs/Web/HTML/Element"
             // Remove all elements except sup and sub.
-            { regex: /<\/?(?:abbr|address|area|article|aside|audio|base|bdi|bdo|blockquote)[^>]*?>/gi, replace: "" },
-            { regex: /<\/?(?:button|canvas|caption|cite|code|col|colgroup|content|data)[^>]*?>/gi, replace: "" },
-            { regex: /<\/?(?:datalist|dd|decorator|del|details|dialog|dfn|div|dl|dt|element)[^>]*?>/gi, replace: "" },
-            { regex: /<\/?(?:em|embed|fieldset|figcaption|figure|footer|form|h1|h2|h3|h4|h5)[^>]*?>/gi, replace: "" },
-            { regex: /<\/?(?:h6|header|hgroup|hr|iframe|input|ins|kbd|keygen|label|legend)[^>]*?>/gi, replace: "" },
-            { regex: /<\/?(?:main|map|mark|menu|menuitem|meter|nav|noscript|object|optgroup)[^>]*?>/gi, replace: "" },
-            { regex: /<\/?(?:option|output|p|param|pre|progress|q|rp|rt|rtc|ruby|samp)[^>]*?>/gi, replace: "" },
-            { regex: /<\/?(?:section|select|script|shadow|small|source|std|strong|summary)[^>]*?>/gi, replace: "" },
-            { regex: /<\/?(?:svg|table|tbody|td|template|textarea|time|tfoot|th|thead|tr|track)[^>]*?>/gi, replace: "" },
-            { regex: /<\/?(?:var|wbr|video)[^>]*?>/gi, replace: "" },
+            {regex: /<\/?(?:abbr|address|area|article|aside|audio|base|bdi|bdo|blockquote)[^>]*?>/gi, replace: ""},
+            {regex: /<\/?(?:button|canvas|caption|cite|code|col|colgroup|content|data)[^>]*?>/gi, replace: ""},
+            {regex: /<\/?(?:datalist|dd|decorator|del|details|dialog|dfn|div|dl|dt|element)[^>]*?>/gi, replace: ""},
+            {regex: /<\/?(?:em|embed|fieldset|figcaption|figure|footer|form|h1|h2|h3|h4|h5)[^>]*?>/gi, replace: ""},
+            {regex: /<\/?(?:h6|header|hgroup|hr|iframe|input|ins|kbd|keygen|label|legend)[^>]*?>/gi, replace: ""},
+            {regex: /<\/?(?:main|map|mark|menu|menuitem|meter|nav|noscript|object|optgroup)[^>]*?>/gi, replace: ""},
+            {regex: /<\/?(?:option|output|p|param|pre|progress|q|rp|rt|rtc|ruby|samp)[^>]*?>/gi, replace: ""},
+            {regex: /<\/?(?:section|select|script|shadow|small|source|std|strong|summary)[^>]*?>/gi, replace: ""},
+            {regex: /<\/?(?:svg|table|tbody|td|template|textarea|time|tfoot|th|thead|tr|track)[^>]*?>/gi, replace: ""},
+            {regex: /<\/?(?:var|wbr|video)[^>]*?>/gi, replace: "" },
 
             // Deprecated elements that might still be used by older sites.
-            { regex: /<\/?(?:acronym|applet|basefont|big|blink|center|dir|frame|frameset|isindex)[^>]*?>/gi, replace: "" },
-            { regex: /<\/?(?:listing|noembed|plaintext|spacer|strike|tt|xmp)[^>]*?>/gi, replace: "" },
+            {regex: /<\/?(?:acronym|applet|basefont|big|blink|center|dir|frame|frameset|isindex)[^>]*?>/gi, replace: ""},
+            {regex: /<\/?(?:listing|noembed|plaintext|spacer|strike|tt|xmp)[^>]*?>/gi, replace: ""},
 
             // Elements from common sites including google.com.
-            { regex: /<\/?(?:jsl|nobr)[^>]*?>/gi, replace: "" },
+            {regex: /<\/?(?:jsl|nobr)[^>]*?>/gi, replace: ""},
 
-            { regex: /<span(?![^>]*?rangySelectionBoundary[^>]*?)[^>]*>[\s\S]*?([\s\S]*?)<\/span>/gi, replace: "$1" },
+            {regex: /<span(?![^>]*?rangySelectionBoundary[^>]*?)[^>]*>[\s\S]*?([\s\S]*?)<\/span>/gi, replace: "$1"},
 
             // Remove empty spans, but not ones from Rangy.
-            { regex: /<span(?![^>]*?rangySelectionBoundary[^>]*?)[^>]*>(&nbsp;|\s)*<\/span>/gi, replace: "" },
-            { regex: /<span(?![^>]*?rangySelectionBoundary[^>]*?)[^>]*>[\s\S]*?([\s\S]*?)<\/span>/gi, replace: "$1" },
+            {regex: /<span(?![^>]*?rangySelectionBoundary[^>]*?)[^>]*>(&nbsp;|\s)*<\/span>/gi, replace: ""},
+            {regex: /<span(?![^>]*?rangySelectionBoundary[^>]*?)[^>]*>[\s\S]*?([\s\S]*?)<\/span>/gi, replace: "$1"},
 
             // Remove empty sup and sub tags that appear after pasting text.
-            { regex: /<sup[^>]*>(&nbsp;|\s)*<\/sup>/gi, replace: "" },
-            { regex: /<sub[^>]*>(&nbsp;|\s)*<\/sub>/gi, replace: "" },
+            {regex: /<sup[^>]*>(&nbsp;|\s)*<\/sup>/gi, replace: ""},
+            {regex: /<sub[^>]*>(&nbsp;|\s)*<\/sub>/gi, replace: ""},
 
             // Remove special xml namespace tag xmlns generate by browser plugin.
-            { regex: /<xmlns.*?>(.*?)<\/xmlns.*?>/gi, replace: "$1" },
-            { regex: /\uFEFF/gi, replace: "" }
+            {regex: /<xmlns.*?>(.*?)<\/xmlns.*?>/gi, replace: "$1"},
+            {regex: /\uFEFF/gi, replace: ""}
         ];
 
         return this.filterContentWithRules(content, rules);
@@ -909,7 +909,7 @@ class OUSupSubEditor {
      * @return {HTMLElement} The corresponding button.
      */
     getSupSubButton(type) {
-        const { toolbar, button } = this.settings.classes;
+        const {toolbar, button} = this.settings.classes;
         return this.getEditor().querySelector(`.${toolbar} .${button}[data-action^="${type}"]`);
     }
 
@@ -979,10 +979,10 @@ export const loadEditor = settings => {
             instances: {
                 [settings.element]: editor,
             },
-            addEditor: function (editor) {
+            addEditor: function(editor) {
                 this.instances[editor.getEditorId()] = editor;
             },
-            getEditorById: function (editorId) {
+            getEditorById: function(editorId) {
                 return this.instances[editorId];
             },
         };
