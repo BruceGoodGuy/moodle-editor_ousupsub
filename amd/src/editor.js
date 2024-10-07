@@ -224,7 +224,7 @@ class OUSupSubEditor {
             };
             if (keyMap.key[event.key] || (event.shiftKey && keyMap.shiftKey[event.key])) {
                 event.preventDefault();
-                this.handleSupSubHotKey(keyMap[event.key]);
+                this.handleSupSubHotKey(keyMap.key[event.key] || keyMap.shiftKey[event.key]);
             }
 
             if (event.ctrlKey) {
