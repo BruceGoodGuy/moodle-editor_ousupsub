@@ -30,10 +30,11 @@ $string['editor_shift_keycode'] = 'Shift + {$a}';
 $string['plugin_title_shortcut'] = '{$a->title} [{$a->shortcut}]';
 $string['pluginname'] = 'Superscript/subscript editor';
 $string['privacy:metadata'] = 'The Superscript/subscript editor plugin does not store any personal data.';
+$string['redo'] = 'Redo';
 $string['settings'] = 'Superscript/subscript editor settings';
 $string['subscript'] = 'Subscript';
 $string['superscript'] = 'Superscript';
-$string['useeditor'] = 'Use this editor';
-$string['redo'] = 'Redo';
-$string['useeditor_desc'] = 'Use this editor in question types, in preference to the old superscript/subscript editor, if both are installed.';
 $string['undo'] = 'Undo';
+$string['useeditor'] = 'Use this editor';
+$string['useeditor_desc'] = 'Use this editor in question types, in preference to the old superscript/subscript editor, if both are installed.';
+

@@ -70,9 +70,9 @@ class ousupsub_texteditor extends texteditor {
      *
      * @param string $elementid
      * @param array $options
-     * @param null $fpoptions
+     * @param null|array $fpoptions
      */
-    public function use_editor($elementid, ?array $options = null, $fpoptions = null) {
+    public function use_editor($elementid, ?array $options = null, ?array $fpoptions = null) {
         global $PAGE, $OUTPUT;
 
         if (empty($options['context'])) {
@@ -121,38 +121,5 @@ class ousupsub_texteditor extends texteditor {
                 ],
             ],
         ]);
-    }
-
-    /**
-     * Create a params array to init the editor.
-     *
-     * @param string $elementid
-     * @param array $options
-     * @param array $fpoptions
-     */
-    protected function get_init_params($elementid, ?array $options = null, ?array $fpoptions = null, $plugins = null) {
-        global $PAGE;
-
-        $directionality = get_string('thisdirection', 'langconfig');
-        $strtime        = get_string('strftimetime');
-        $strdate        = get_string('strftimedaydate');
-        $lang           = current_language();
-        $contentcss     = $PAGE->theme->editor_css_url()->out(false);
-
-        $params = [
-            'elementid' => $elementid,
-            'content_css' => $contentcss,
-            'contextid' => $options['context']->id,
-            'language' => $lang,
-            'directionality' => $directionality,
-            'filepickeroptions' => array(),
-            'plugins' => $plugins,
-            'pageHash' => sha1($PAGE->url),
-        ];
-        if ($fpoptions) {
-            $params['filepickeroptions'] = $fpoptions;
-        }
-
-        return $params;
     }
 }
