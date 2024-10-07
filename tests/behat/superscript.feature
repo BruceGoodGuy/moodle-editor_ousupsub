@@ -31,7 +31,7 @@ Feature: ousupsub superscript button
     And I should see "Hel<sup>ic</sup>opter" in the "Input" ousupsub editor
 
     # Select outside sup tags. Click button
-    And I select the range "0,3,2,0" in the "Input" ousupsub editor
+    And I select the range "'sup',0,'sup',2" in the "Input" ousupsub editor
     And I click on "Superscript" "button"
     And I should see "Helicopter" in the "Input" ousupsub editor
 

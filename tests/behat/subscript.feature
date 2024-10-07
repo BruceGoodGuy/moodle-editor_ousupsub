@@ -31,7 +31,7 @@ Feature: Subscript button
     And I should see "Hel<sub>ic</sub>opter" in the "Input" ousupsub editor
 
     # Select outside sub tags. Click button
-    And I select the range "0,3,2,0" in the "Input" ousupsub editor
+    And I select the range "'sub',0,'sub',2" in the "Input" ousupsub editor
     And I click on "Subscript" "button"
     And I should see "Helicopter" in the "Input" ousupsub editor
 

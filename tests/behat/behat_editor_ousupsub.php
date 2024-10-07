@@ -152,48 +152,50 @@ class behat_editor_ousupsub extends behat_base {
         list($startquery, $startoffset, $endquery, $endoffset) = explode(",", $range);
         $js = '
     function getNode(editor, query, node) {
-        if (query !== "" && !isNaN(query)) {
-            node = editor.childNodes[query];
-        } else {
-            node = query ? editor.querySelector(query) : editor;
-            node = node.firstChild;
-        }
-        return node;
+       if (query !== "" && !isNaN(query)) {
+           node = editor.childNodes[query];
+       } else {
+           node = query ? editor.querySelector(query) : editor;
+           node = node.firstChild;
+       }
+       if (node.firstChild) {
+           return node.firstChild;
+       }
+       return node;
     }
-    function RangySelectTextBehat() {
-        var id = "'.$editorid.'", startquery = '.$startquery.', startoffset = '.$startoffset.',
-            endquery  = '.$endquery.', endoffset = '.$endoffset.';
-        var e = document.getElementById(id + "editable"),
-            r = rangy.createRange();
-
-        e.focus();
-        if(startquery || startoffset || endquery || endoffset) {
-            // Set defaults for testing.
-            startoffset = startoffset ? startoffset : 0;
-            endoffset = endoffset ? endoffset : 0;
-
-            // Find the text nodes from the Start/end queries or default to the editor node.
-            var startnode, endnode;
-            startnode = getNode(e, startquery, startoffset);
-            endnode = getNode(e, endquery, endoffset);
-            r.setStart(startnode, startoffset);
-            r.setEnd(endnode, endoffset);
-        } else {
-            r.selectNodeContents(e.firstChild);
+    function SelectTextBehat() {
+        const editorId = "'.$editorid.'", startQuery = '.$startquery.', startOffset = '.$startoffset.',
+            endQuery  = '.$endquery.', endOffset = '.$endoffset.';
+        const editor = GetEditor(editorId).getEditorContent();
+        if (!editor) {
+            console.error("Editor element not found!");
+            return;
         }
-        var s = rangy.getSelection();
-        s.setSingleRange(r);
-        if (typeof editor_ousupsub !== "undefined") {
-            // For testing standalone.
-            editor_ousupsub.getEditor(id)._selections = [r];
+
+        const range = document.createRange(); // Create a new range object
+        const selection = window.getSelection(); // Get the current selection object
+
+        editor.focus(); // Focus the editor
+
+        // Determine start and end nodes for selection
+        const startNode = getNode(editor, startQuery, startOffset);
+        const endNode = getNode(editor, endQuery, endOffset);
+
+        if (startNode && endNode) {
+            // Set the range based on the start and end positions
+            selection.removeAllRanges();
+            range.setStart(startNode, startOffset);
+            range.setEnd(endNode, endOffset);
         } else {
-            // For testing in Moodle.
-            YUI().use("moodle-editor_ousupsub-editor", function(Y) {
-                Y.M.editor_ousupsub.getEditor(id)._selections = [r];
-            });
+            // Default selection: select all contents of the first child
+            range.selectNodeContents(editor.firstChild);
+             // Clear existing selections and apply the new range
+            selection.removeAllRanges();
         }
+        selection.addRange(range);
     }
-    RangySelectTextBehat();';
+    SelectTextBehat();';
+        $js = $this->get_js_get_editor() . $js;
         $this->getSession()->executeScript($js);
     }
 
@@ -223,36 +225,54 @@ class behat_editor_ousupsub extends behat_base {
         // Trigger the key press through javascript.
         $js = '
     function TriggerKeyPressBehat(id, keys) {
-    // http://www.wfimc.org/public/js/yui/3.4.1/docs/event/simulate.html
-    YUI().use("node-event-simulate", function(Y) {
-        var node = Y.one("#" + id + "editable");
+        const node = document.getElementById(id + "editable");
+
+        if (!node) {
+            console.error("Element not found");
+            return;
+        }
 
         node.focus();
-        var keyEvent = "keypress";
-        if (Y.UA.webkit || Y.UA.ie) {
-            keyEvent = "keydown";
-        }
-        var event = {};
 
-        // Handle modifiers like shift, ctrl and alt.
-        var trimmedKeys = [];
-        for(var i=0; i<keys.length;i++) {
-            // Look for key (press|down|up) event switch
-            if(keys[i].indexOf && keys[i].indexOf("key") > -1) {
-                keyEvent = keys[i];
-                continue;
-            }
-            if(!keys[i].indexOf || !keys[i].indexOf("Key")) {
-                trimmedKeys.push(keys[i]);
-                continue;
-            }
-            event[keys[i]] = true;
+        const eventOptions = {
+            bubbles: true,
+            cancelable: true,
+            key: "",       // the key value will be assigned later
+            code: "",      // the key code value will be assigned later
+            ctrlKey: false,
+            shiftKey: false,
+            altKey: false,
+            metaKey: false
+        };
+
+        // Set modifier keys if they are included
+        if (keys.includes("ctrlKey")) {
+            eventOptions.ctrlKey = true;
         }
-        for(var i=0; i<trimmedKeys.length;i++) {
-            event.charCode = trimmedKeys[i];
-            node.simulate(keyEvent, event);
+        if (keys.includes("shiftKey")) {
+            eventOptions.shiftKey = true;
         }
-    });
+        if (keys.includes("altKey")) {
+            eventOptions.altKey = true;
+        }
+        if (keys.includes("metaKey")) { // Windows or Command key on macOS
+            eventOptions.metaKey = true;
+        }
+
+        // Remove modifier keys from the array to get the actual key
+        const actualKey = keys.filter(key => !["ctrlKey", "shiftKey", "altKey", "metaKey"].includes(key))[0];
+
+        // Set the key and code in event options
+        if (actualKey) {
+            eventOptions.key = actualKey;
+            eventOptions.code = actualKey;
+        }
+
+        // Create the keyboard event
+        const keyboardEvent = new KeyboardEvent("keydown", eventOptions);
+
+        // Dispatch the event to the target element
+        node.dispatchEvent(keyboardEvent);
 
     // Update the textarea text from the contenteditable div we just changed.
     UpdateTextArea(id);
@@ -286,7 +306,7 @@ class behat_editor_ousupsub extends behat_base {
         $js = '
     function EnterTextBehat (action, id, text) {
     // Only works in chrome.
-    var target = document.getElementById(id + "editable");
+    const target = document.getElementById(id + "editable");
     // Update the textarea text from the contenteditable div we just changed.
     if (action == "enter") {
         target.innerHTML = text;
@@ -380,14 +400,11 @@ function PasteTextBehat (id, text) {
         // Trigger the key press through javascript.
         // The clibpoardData object is not created correctly in chrome. Pass our own.
         $js = '
-function SelectAndClickFirstButtonBehat (id) {
-    var editor = GetEditor(id);
-    var button = editor.toolbar.all(\'button[tabindex="0"]\').item(0)
-    button.focus();
-    editor._tabFocus = button;
-    document.activeElement.click();
-}
-    SelectAndClickFirstButtonBehat("'.$editorid.'");';
+            function SelectAndClickFirstButtonBehat (id) {
+                GetEditor(id).getButtonContainer()[0].focus();
+                document.activeElement.click();
+            }
+            SelectAndClickFirstButtonBehat("'.$editorid.'");';
         $js = $this->get_js_get_editor() . $js;
         $this->getSession()->executeScript($js);
 
@@ -400,7 +417,7 @@ function SelectAndClickFirstButtonBehat (id) {
      */
     public function i_press_superscript_key_in_the_ousupsub_edito($fieldlocator) {
         $this->execute('behat_editor_ousupsub::press_key_in_the_ousupsub_editor',
-                array('\'keypress\', 94', 'Input'));
+                array('94', 'Input'));
     }
 
     /**
@@ -410,7 +427,7 @@ function SelectAndClickFirstButtonBehat (id) {
      */
     public function i_press_subscript_key_in_the_ousupsub_edito($fieldlocator) {
         $this->execute('behat_editor_ousupsub::press_key_in_the_ousupsub_editor',
-                array('\'keypress\', 95', 'Input'));
+                array('95', 'Input'));
     }
 
     /**
@@ -420,7 +437,7 @@ function SelectAndClickFirstButtonBehat (id) {
      */
     public function i_press_up_arrow_key_in_the_ousupsub_edito($fieldlocator) {
         $this->execute('behat_editor_ousupsub::press_key_in_the_ousupsub_editor',
-                array('38', 'Input'));
+                array('\'ArrowUp\'', 'Input'));
     }
 
     /**
@@ -430,7 +447,7 @@ function SelectAndClickFirstButtonBehat (id) {
      */
     public function i_press_down_arrow_key_in_the_ousupsub_edito($fieldlocator) {
         $this->execute('behat_editor_ousupsub::press_key_in_the_ousupsub_editor',
-                array('40', 'Input'));
+                array('\'ArrowDown\'', 'Input'));
     }
 
     /**
@@ -440,7 +457,7 @@ function SelectAndClickFirstButtonBehat (id) {
      */
     public function i_press_undo_key_in_the_ousupsub_edito($fieldlocator) {
         $this->execute('behat_editor_ousupsub::press_key_in_the_ousupsub_editor',
-                array('\'ctrlKey\', 90', 'Input'));
+                array('\'ctrlKey\', \'z\'', 'Input'));
     }
 
     /**
@@ -450,7 +467,7 @@ function SelectAndClickFirstButtonBehat (id) {
      */
     public function i_press_redo_key_in_the_ousupsub_edito($fieldlocator) {
         $this->execute('behat_editor_ousupsub::press_key_in_the_ousupsub_editor',
-                array('\'ctrlKey\', 89', 'Input'));
+                array('\'ctrlKey\', \'y\'', 'Input'));
     }
 
     /**
@@ -463,18 +480,9 @@ function SelectAndClickFirstButtonBehat (id) {
     protected function get_js_update_textarea() {
         $js = $this->get_js_get_editor();
         $js .= '
-function UpdateTextArea (id) {
-    var editor = GetEditor(id);
-    editor.updateOriginal();
-    editor.fire("ousupsub:selectionchanged");
-    if ("createEvent" in document) {
-        var evt = document.createEvent("HTMLEvents");
-        evt.initEvent("change", false, true);
-        editor._getEditorNode().dispatchEvent(evt);
-    }
-    else {
-        editor._getEditorNode().fireEvent("onchange");
-    }
+function UpdateTextArea(id) {
+    const editor = GetEditor(id);
+    editor.getTextArea().value = editor.getCleanHTML();
 }';
         return $js;
     }
@@ -489,17 +497,7 @@ function UpdateTextArea (id) {
     protected function get_js_get_editor() {
         $js = '
 function GetEditor (id) {
-    var editor;
-    if (typeof editor_ousupsub !== "undefined") {
-        // For testing standalone.
-        editor = editor_ousupsub.getEditor(id);
-    } else {
-        // For testing in Moodle.
-        YUI().use("moodle-editor_ousupsub-editor", function(Y) {
-            editor = Y.M.editor_ousupsub.getEditor(id);
-        });
-    }
-    return editor;
+    return OUSupSubEditor.getEditorById(id);
 }';
         return $js;
     }

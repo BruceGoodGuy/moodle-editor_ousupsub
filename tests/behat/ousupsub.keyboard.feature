@@ -13,7 +13,6 @@ Feature: Sup/Sup keyboard support
 
   @javascript
   Scenario: Applying Subscript and Superscript on text using keyboard
-    #And I am using the OU theme
     Given I log in as "admin"
     And I am on the integrated "both" editor test page
     And I "enter" the text "Superscript and Subscript" in the "Input" ousupsub editor
