@@ -22,6 +22,8 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+$string['button_sub_title'] = 'Subscript [Shift + _ or Down arrow]';
+$string['button_sup_title'] = 'Superscript [Shift + ^ or Up arrow]';
 $string['editor_command_keycode'] = 'Cmd + {$a}';
 $string['editor_control_keycode'] = 'Ctrl + {$a}';
 $string['editor_shift_keycode'] = 'Shift + {$a}';

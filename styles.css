@@ -90,15 +90,21 @@ div.editor_ousupsub_toolbar button[disabled] {
     cursor: default;
 }
 
-.editor_ousupsub_toolbar button:hover {
+.editor_ousupsub  .editor_ousupsub_toolbar button:hover {
     background-image: radial-gradient(ellipse at center, #fff 60%, #d2691e 100%);
     background-color: #ebebeb;
+    outline: none;
 }
 
-.editor_ousupsub_toolbar button:active,
-.editor_ousupsub_toolbar button.highlight {
+.editor_ousupsub .editor_ousupsub_toolbar button:active,
+.editor_ousupsub .editor_ousupsub_toolbar button.highlight {
     background-image: radial-gradient(ellipse at center, #fff 40%, #d2691e 100%);
     background-color: #dfdfdf;
+}
+
+.editor_ousupsub .editor_ousupsub_toolbar button:focus {
+    background-image: unset;
+    background-color: #002158;
 }
 
 /* Make firefox button sizes match other browsers */
