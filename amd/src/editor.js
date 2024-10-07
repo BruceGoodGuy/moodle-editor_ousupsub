@@ -680,6 +680,7 @@ class OUSupSubEditor {
      * Cleanup html that comes from WYSIWYG paste events. These are more likely to contain messy code that we should strip.
      *
      * @param {String} content - The content data need to be clean.
+     * @return {String} The clean text.
      */
     cleanPasteHTML(content) {
         // Return an empty string if passed an invalid or empty object.
