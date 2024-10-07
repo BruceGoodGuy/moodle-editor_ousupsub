@@ -70,9 +70,9 @@ class ousupsub_texteditor extends texteditor {
      *
      * @param string $elementid
      * @param array $options
-     * @param mixed $fpoptions
+     * @param obejct $fpoptions
      */
-    public function use_editor($elementid, ?array $options = null, $fpoptions = null) {
+    public function use_editor(string $elementid, ?array $options = null, $fpoptions = null) {
         global $PAGE, $OUTPUT;
 
         if (empty($options['context'])) {

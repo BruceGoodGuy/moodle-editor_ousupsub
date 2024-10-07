@@ -38,6 +38,7 @@ class behat_editor_ousupsub extends behat_base {
      * Opens an ousupsubtest page.
      *
      * @Given /^I am on the integrated "(sup|sub|both)" editor test page$/
+     * @param string $type
      */
     public function i_am_on_integrated_test_page($type) {
         $this->getSession()->visit($this->locate_path(
