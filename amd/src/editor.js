@@ -718,9 +718,9 @@ class OUSupSubEditor {
 
         // Run some more rules that care about quotes and whitespace.
         rules = [
-            {regex: /(<[^>]*?style\s*?=\s*?"[^>"]*?)(?:[\s]*MSO[-:][^>;"]*;?)+/gi, replace: "$1" },
-            {regex: /(<[^>]*?class\s*?=\s*?"[^>"]*?)(?:[\s]*MSO[_a-zA-Z0-9\-]*)+/gi, replace: "$1"},
-            {regex: /(<[^>]*?class\s*?=\s*?"[^>"]*?)(?:[\s]*Apple-[_a-zA-Z0-9\-]*)+/gi, replace: "$1"},
+            {regex: /(<[^>]*?style\s*?=\s*?"[^>"]*?)(?:[\s]*MSO[-:][^>;"]*;?)+/gi, replace: "$1"},
+            {regex: /(<[^>]*?class\s*?=\s*?"[^>"]*?)(?:[\s]*MSO[_a-zA-Z0-9-]*)+/gi, replace: "$1"},
+            {regex: /(<[^>]*?class\s*?=\s*?"[^>"]*?)(?:[\s]*Apple-[_a-zA-Z0-9-]*)+/gi, replace: "$1"},
             {regex: /<a [^>]*?name\s*?=\s*?"OLE_LINK\d*?"[^>]*?>\s*?<\/a>/gi, replace: ""},
         ];
 
@@ -773,7 +773,7 @@ class OUSupSubEditor {
             {regex: /<sup[^>]*(&nbsp;|\s)*>/gi, replace: "<sup>"},
             {regex: /<sub[^>]*(&nbsp;|\s)*>/gi, replace: "<sub>"},
 
-            //Replace &nbsp; with space.
+            // Replace &nbsp; with space.
             {regex: /&nbsp;/gi, replace: " "},
 
             // Combine matching tags with spaces in between.
@@ -817,7 +817,7 @@ class OUSupSubEditor {
             {regex: /<\/?(?:option|output|p|param|pre|progress|q|rp|rt|rtc|ruby|samp)[^>]*?>/gi, replace: ""},
             {regex: /<\/?(?:section|select|script|shadow|small|source|std|strong|summary)[^>]*?>/gi, replace: ""},
             {regex: /<\/?(?:svg|table|tbody|td|template|textarea|time|tfoot|th|thead|tr|track)[^>]*?>/gi, replace: ""},
-            {regex: /<\/?(?:var|wbr|video)[^>]*?>/gi, replace: "" },
+            {regex: /<\/?(?:var|wbr|video)[^>]*?>/gi, replace: ""},
 
             // Deprecated elements that might still be used by older sites.
             {regex: /<\/?(?:acronym|applet|basefont|big|blink|center|dir|frame|frameset|isindex)[^>]*?>/gi, replace: ""},
